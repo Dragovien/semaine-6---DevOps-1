@@ -1,0 +1,53 @@
+services:
+
+  app:
+    build: ./app
+    ports:
+      - "80:80"
+    networks:
+      - front
+      - back
+
+  api:
+    build: ./api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - back
+    
+
+  db:
+    image: mariadb:latest
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin 
+    restart: always
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      MARIADB_DATABASE: pokemon
+      MARIADB_USER: pikachu
+      MARIADB_PASSWORD: pikachu
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    networks:
+      - back
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - back
+
+volumes:
+  mariadb-data:
+
+
+networks:
+  front:
+  back:

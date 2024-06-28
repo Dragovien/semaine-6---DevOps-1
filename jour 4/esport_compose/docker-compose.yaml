@@ -1,0 +1,24 @@
+services:
+
+  esport:
+    build: ./esport 
+    ports:
+      - "3000:80"
+    networks:
+      - esport-network
+
+  db: 
+    image: mysql:latest
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: "testcompose"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks: 
+      - esport-network
+
+volumes:
+  db-data:
+
+networks:
+  esport-network:
